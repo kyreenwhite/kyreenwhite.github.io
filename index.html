@@ -1,28 +1,25 @@
-<!DOCTYPE html> 
-<html>
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"/>
-    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
-    <title> GEOG 485L/585> -- My First Map </title>
+  <title>Kyreen White</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="personalwebsite.css">
 </head>
 <body>
-    <p>
-         My first map will appear here:
-    </p>
-    <div id="mapId" style="height:400px; width: 600px"></div>
-    <script>
-        // Bandelier Hall East lat/long: 35.08432degrees N, 106.6241degrees W
-        //create map variable "mymap" that points to the map placed in the map Id <div>
-        //zoom the view on Bandelier Hall East building at a 17 zoom lelve 
-        var mymap = L.map ('mapId').setView([35.0843, -106.6264], 17);
 
-        //create a variable named "osm" that is used to hold OpenStreetMap tile layer 
-        // var osm = new L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-        var osm = new L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+  <nav>
+    <li class="active"><a href="index.html">Home</a></li>
+    <li><a href="Resume.html">Full Resume</a></li>
+    <li><a href="projects.html">Projects</a></li>
+    <li><a href='intrests.html'>Intrests</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </nav>
 
-        //add the OpenStreetMap tile layer (i.e., the varialbe osm you defined above) to the map
-        osm.addTo(mymap);
+  <h1>Kyreen White</h1>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/0/06/241014_Yeonjun.jpg">
 
-    </script>
-    </body>
+
+</body>
+
 </html>
