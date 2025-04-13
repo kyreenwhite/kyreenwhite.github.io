@@ -14,10 +14,16 @@ h1 {
     font-size: 80px;
     color: rgb(130, 99, 86);
 }
-p{
+h2 {
+    text-align: center;
+    font-size: 40px;
+    color: rgb(130, 99, 86);
+    margin: 30px;
+}
+p {
     text-align: center;
     color: rgb(130, 99, 86);
-    font-size: 30px;
+    font-size: 25px;
     border-color: black;
     border-width: 5px;
 }
@@ -58,6 +64,39 @@ object {
     display: block;
     margin-left: auto;
     margin-right: auto;
+    padding: 20px;
     width: 75%;
     zoom: 100%;
+}
+p.note{
+    text-align: left;
+    color: rgb(130, 99, 86);
+    font-size: 15px;
+    margin: 20px;
+    border-color: black;
+    border: 5px;
+}
+video {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+    height: 90%;
+    padding: 30px;
+}
+img.hokona {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+    padding: 20px;
+}
+p.discription {
+    text-align: center;
+    color: rgb(130, 99, 86);
+    font-size: 20px;
+}
+video.worm {
+    height: 600px; 
+    width: 300px;
 }
