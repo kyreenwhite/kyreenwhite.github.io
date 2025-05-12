@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Visually Revealing Unseen Pollution</title>
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="JS_CSS_downloaded_libraries/leaflet.css" />
+    <script src="JS_CSS_downloaded_libraries/leaflet.js"></script>
+    <!-- 2. Grouped-layers plugin CSS/JS -->
+    <link rel="stylesheet" href="JS_CSS_downloaded_libraries/leaflet.groupedlayercontrol.css" />
+    <script src="JS_CSS_downloaded_libraries/leaflet.groupedlayercontrol.js"></script>
+    <!-- PapaParse for CSV parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
+    <!-- Leaflet.heat for heatmap rendering -->
+    <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+    <!-- Turf.js for centriod rendering for noise pollution heatmap-->
+    <script src="https://unpkg.com/@turf/turf@6.5.0/turf.min.js"></script>
+    <!-- Our CSS and JS scripts-->
+    <link rel="stylesheet" href="myCSS_styleFiles/OurStylesheet.css" />
+    <script src="myJS_scripts/myMain.js"></script>
+</head>
+
+<body>
+    <script>
+        function openTab(evt, tabName) {
+            var tabcontent = document.getElementsByClassName("tabcontent");
+            for (var i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            var tablinks = document.getElementsByClassName("tablinks");
+            for (var i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.classList.add("active");
+        }
+        // document.getElementById("defaultOpen").click();
+    </script>
+    <!-- Header -->
+    <div class="header-section">
+        <h1>Visually Revealing Unseen Pollution</h1>
+    </div>
+    <!-- Tabs -->
+    <div class="tab">
+        <button class="tablinks" onclick="openTab(event, 'Maps')" id="defaultOpen">Home</button>
+        <button class="tablinks" onclick="openTab(event, 'MoreInformation')">Learn More</button>
+        <button class="tablinks" onclick="openTab(event, 'About')">About</button>
+    </div>
+
+    <!-- Main Page -->
+    <div id="Maps" class="tabcontent" style="display: block; text-align: right;">
+
+        <!-- Map  -->
+        <div class="main-container">
+            <div id="layerControlContainer"></div>
+            <div id="mapId"></div>
+        </div>
+
+        <!-- ===== Units Explanation ===== -->
+        <section id="units-info">
+            <h3 style="margin-top:0; font-size:1.1em; color: white;"><strong>Data Units &amp; Scales </strong>
+                <span style="font-weight:normal;">&lpar;See &quot;About&quot; Page for Data Sources&rpar;</span>
+            </h3>
+            <ul>
+                <li><strong>Human Population Density:</strong> People per square mile</li>
+                <li><strong>Air Pollution (AQI):</strong> Annual average Air Quality Index</li>
+                <li><strong>Light Pollution (SQM):</strong> Annual average Sky Quality Meter readings</li>
+                <li><strong>Noise Pollution:</strong> Average dB of traffic noise per census tract</li>
+                <li><strong>Gray Flycatcher Density:</strong> Relative Abundance &lpar;RA&rpar; index &lpar;0&dash;10&rpar;</li>
+                <li><strong>Usnea Lichen Occurrences:</strong> Number of individual observations</li>
+                <li><strong>Firefly Sightings:</strong> Number of individual observations</li>
+            </ul>
+        </section>
+
+        <div id="species-info">
+            <h2>Explore how different pollutions impact key species</h2>
+            <div class="species-container">
+                <!-- Usnea Lichen -->
+                <div class="species-column">
+                    <img src="data/lichen.jpg" alt="Usnea Lichen">
+                    <h3>Usnea Lichen</h3>
+                    <p>
+                        Lichens absorb nutrients directly from the air over their entire surface,
+                        making them sensitive to air pollution. <i>Usnea</i> lichens are particularly sensitive
+                        to air pollutants and are often used as a bioindicator. Moving around the map above,
+                        you can discover how <i>usnea</i> lichen are rarely able to thrive in areas with high
+                        air pollution.
+                    </p>
+                </div>
+                <!-- Fireflies -->
+                <div class="species-column">
+                    <img src="data/fireflies.jpg" alt="Fireflies">
+                    <h3>Fireflies</h3>
+                    <p>
+                        Light pollution disrupts the mating signals of fireflies, whose bioluminescent
+                        flashes need dark backdrops to be seen by potential mates. Excessive night lighting
+                        can lead to reduced reproduction rates and local population declines. Delve into the
+                        map above to see how <i>Photinus pyralis</i> fireflies tend to be spotted away from areas with
+                        high levels
+                        of light pollution.
+                    </p>
+                </div>
+                <!-- Gray Flycatcher -->
+                <div class="species-column">
+                    <img src="data/grayflycatcher.jpeg" alt="Gray Flycatcher">
+                    <h3>Gray Flycatchers</h3>
+                    <p>
+                        Noise pollution interferes with the Gray Flycatcher&rsquo;s song-based
+                        communication, masking calls used to defend territories and attract mates.
+                        Chronic noise can force them to sing louder or abandon noisy habitats,
+                        impacting their breeding success. Explore the map to see how Gray Flycatchers
+                        avoid high-pollution areas.
+                    </p>
+                </div>
+                <br>
+                <br>
+                <br>
+                <br>
+            </div>
+            <section id="info-banner">
+                This interactive map allows you to to explore how air, light, and noise pollution, alongside human
+                population,
+                impact key species in the United States. Click on the Learn More button above to learn about how these
+                pollutants
+                affect our environment. &copy; Julian Holman, Hope Smith, and Kyreen White 2025
+            </section>
+        </div>
+    </div>
+
+    <!-- More Information -->
+    <div id="MoreInformation" class="tabcontent" style="display: none; padding: 20px;">
+        <!-- Container for image + text -->
+        <div style="display: flex; flex-direction: column; align-items: center;">
+
+            <!-- Image group 1 -->
+            <div style="display: flex; gap: 100px; text-align: center;">
+                <div>
+                    <img src="data/air01.jpg" alt="Smokestack" width="300">
+                    <a href="https://www.usrisk.com/practices/practices-overview/" class="image-credit">US Risk</a>
+                </div>
+                <div>
+                    <img src="data/light01.jpg" alt="Light Pollution in the US" width="300">
+                    <a href="https://www.coastalstudiesinstitute.org/student-study-reveals-many-in-support-of-light-pollution-reduction-on-outer-banks/"
+                        class="image-credit">Coastal Studies Institute</a>
+                </div>
+                <div>
+                    <img src="data/noise01.jpg" alt="Noisy City Street" width="300">
+                    <a href="https://wwwnc.cdc.gov/travel/page/road-safety" class="image-credit">CDC</a>
+                </div>
+            </div>
+
+            <!-- Text content below image -->
+            <div style="font-size: 1.2em; margin-left:80px;margin-right:80px; color: white;">
+                <p>
+                    We all know that pollution hurts our enviornment, but not all pollutants are widely known. This
+                    web
+                    map
+                    is designed to draw attention to some of the least-publicized forms of pollution: air pollution,
+                    noise pollution,
+                    and light pollution.
+                </p>
+                <p></p>
+                Air pollution is a more known pollution, yet its effect on wildlife is often overlooked. Air
+                pollutants have long been found to have global effects on wild mammals and birds, including being
+                responsible for population decline, species distribution changes, and individual suffering
+                (Newman, 1979). You can explore how air pollution affects lichen in the genus <i>Usnea</i>, which
+                is sensitive to air pollution, in this web map.
+                </p>
+                <!-- <br> -->
+                <p>
+                    Light pollution is more harmful to the ecosystem than most people think. Not only does light
+                    pollution
+                    stop us from admiring stars at night, it is a threat to biodiversity globally (Dominoni, 2015).
+                    It can cause stress to all kinds of wildlife and plants, weakening them over time and increasing
+                    mortality.
+                    It can also disrupt the navigation and rhythm of migrating animals, from salmon to monarch
+                    butterflies
+                    (Burt et al., 2023). Using this web map, you can see how <i>Photinus pyralis</i> fireflies are
+                    affected
+                    by light pollution.
+                </p>
+
+                <p>
+                    Noise pollution is perhaps an even lesser known form of pollution. Like light pollution, noise
+                    pollution
+                    can have damaging long-term effects on individual
+                    animals&rsquo; biology, but it does not stop there (Kight and Swaddle, 2011). Animal density
+                    often
+                    decreases in areas with high noise pollution, particularly among many
+                    bird and frog species (Slabbekoorn, 2019). Noise pollution isn't just above-ground, too.
+                    Underwater noise pollution is just as pervasive and even worse, especially because we humans
+                    often
+                    remain unaware of its presence (Yong, 2022).
+                    You can explore noise pollution's effect on one bird in particular, the Gray Flycatcher,
+                    a flycatcher native to North America that is particularly sensitive to noise pollution.
+                </p>
+            </div>
+            <br>
+            <!-- Image group 2 -->
+            <div style="display: flex; justify-content: center; gap: 100px; margin-top: 20px; text-align: center;">
+                <div>
+                    <img src="data/air02.jpg" alt="Smog over a City" width="300">
+                    <a href="https://www.ibtimes.com/santiago-smog-chile-declares-environmental-emergency-over-air-pollution-1976819"
+                        class="image-credit">International Business Times</a>
+                </div>
+                <div>
+                    <img src="data/light02.jpg" alt="Bright City at Night" width="300">
+                    <a href="https://www.nhpr.org/nhpr-blogs/2012-08-13/what-can-we-do-to-reduce-our-light-footprint"
+                        class="image-credit">NHPR</a>
+                </div>
+                <div>
+                    <img src="data/noise02.jpg" alt="Loud Airplane over City" width="300">
+                    <a href="https://eng.famu.fsu.edu/sites/g/files/upcbnu1751/files/pdfs/cee/MEng-Info-Sheet-web-09.22.pdf"
+                        class="image-credit">
+                        FAMU-FSU Engineering
+                    </a>
+                </div>
+            </div>
+            <br>
+            <br>
+            <h2>References</h2>
+            <div class="right-col" style="margin-left:80px;">
+                <p>Burt, C. S., Kelly, J. F., Trankina, G. E., Silva, C. L., Khalighifar, A., Jenkins-Smith, H. C.,
+                    Fox,
+                    A. S., Fristrup, K. M., & Horton, K. G. (2023). The effects of light pollution on migratory
+                    animal
+                    behavior. Trends in Ecology & Evolution, 38(4). https://doi.org/10.1016/j.tree.2022.12.006</p>
+                <p>Dominoni, D. M. (2015). The effects of light pollution on biological rhythms of birds: an
+                    integrated,
+                    mechanistic perspective. Journal of Ornithology, 156(S1), 409&dash;418.
+                    https://doi.org/10.1007/s10336-015-1196-3</p>
+                <p>Kight, C. R., & Swaddle, J. P. (2011). How and why environmental noise impacts animals: an
+                    integrative, mechanistic review. Ecology Letters, 14(10), 1052&dash;1061.
+                    https://doi.org/10.1111/j.1461-0248.2011.01664.x</p>
+                <p>Newman, J. R. (1979). Effects of industrial air pollution on wildlife. Biological Conservation,
+                    15(3), 181&dash;190. https://doi.org/10.1016/0006-3207(79)90039-9</p>
+                <p>Slabbekoorn, H. (2019). Noise pollution. Current Biology, 29(19), R957&dash;R960.
+                    https://doi.org/10.1016/j.cub.2019.07.018</p>
+                <p>Yong, E. (2022). An Immense World: How Animal Senses Reveal the Hidden Realms Around Us. Vintage
+                    Publishing.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="About" class="tabcontent" style="display: none; padding: 20px; margin-left:80px; margin-right:80px;">
+        <h2>About</h2>
+        <p>This project was created by Julian Holman, Hope Smith, and Kyreen White for GEOG 485L. It visualizes the
+            impact of human activity on the biosphere using heat maps of population density.</p>
+        <p>We have created an interactive web map where users can investigate the impact that various forms of
+            pollution
+            and human activity have on nonhuman density, biodiversity, and activity. Our primary goal is to help
+            users
+            investigate the impact of lesser-known forms of pollution on the biosphere, and to ultimately inform
+            their
+            individual and systemic decision making.
+        </p>
+        <p><b>Team Member: </b><a href="https://kyreenwhite.github.io/MyWebApp/">Kyreen White</a>
+            (KyreenWhite@gmail.com)</p>
+        <p><b>Team Member: </b><a href="https://hopedsmith.github.io">Hope Smith</a> (hsmith11@unm.edu)</p>
+        <p><b>Team Member:</b> Julian Holman (juliancecilholman@gmail.com)</p>
+        <p><b>Project Advisor: </b><a href="www.lipingyang.org">Dr. Liping Yang</a> (course instructor of GEOG
+            485L/585L
+            Interactive Web Mapping)</p>
+        <h2>Data Sources</h2>
+        <a href="https://www.kaggle.com/datasets/mmcgurr/us-city-population-densities" target="_blank">Human
+            Population
+            Density Data</a>
+        <br>
+        <a href="https://deohs.washington.edu/national-transportation-noise-exposure-map-download" target="_blank">Noise
+            Pollution Data</a>
+        <br>
+        <a href="https://www.mbr-pwrc.usgs.gov/bbs/shape_ra12.html" target="_blank">Gray Flycatcher Density Data</a>
+        <br>
+        <a href="https://aqs.epa.gov/aqsweb/airdata/download_files.html#Annual" target="_blank">Air Quality Index
+            Data</a>
+        <br>
+        <a href="https://lichenportal.org/portal/collections/map/index.php" target="_blank">Lichens of the genus
+            Usnea
+            Observation Data</a>
+        <br>
+        <a href="https://globeatnight.org/maps-data/" target="_blank">Light Pollution Data</a>
+        <br>
+        <a href="https://www.gbif.org/" target="_blank">Firefly (<i>Photinus pyralis</i>)
+            Observation Data</a>
+        <br>
+
+    </div>
+    <script>
+        // Ensure the Home tab is shown once everything is parsed
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById("defaultOpen").click();
+        });
+    </script>
+</body>
+
+</html>
